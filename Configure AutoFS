@@ -1,0 +1,88 @@
+Question:7 Configure NTP (time synchronization service) (service)
+Configure your system to be an NTP client for materials.example.com.
+(Note: materials.example.com is a DNS alias for classroom.example.com)
+Answer:7 Configure NTP (time synchronization service) (service)
+# systemctl list-units lists all startup units
+# Unit is the basic unit for Systemd to manage system resources
+
+# The client side synchronizes with the server
+# nodel is the client materials.example.com's NTP is the server
+
+1.View the name of the main configuration file of the NTP service
+[root@node1 ~]# systemctl list-units | grep NTP
+chronyd.service
+
+2. Confirm whether the service is started
+[root@node1 ~]# systemctl status chronyd.service
+Active: active (running)
+
+3. Modify the service configuration file and specify the address of the upstream server to be added
+[root@node1 ~]# vim /etc/chrony.conf
+#server_gateway iburst
+server materials.example.com iburst
+
+4. Restart the service, let the modification of the configuration file take effect, and set the boot to start automatically
+[root@node1 ~]# systemctl restart chronyd.service
+[root@node1 ~]# systemctl enable chronyd.service
+
+5. Verify
+method one:
+[root@node1 ~]# chronyc sources -v #View synchronization time status
+^* classroom.example.com
+
+method two:
+[root@node1 ~]# timedatectl
+#Check whether NTP is active and whether the system clock is synchronized
+System clock synchronized: yes
+                NTP service: active
+Question:8 Configure autofs (service)
+Configure autofs to automatically mount remote users' home directories as follows:
+
+materials.example.com ( 172.25.254.254 ) NFS exports /rhome to your system. This file system contains a preconfigured home directory for - user remoteuser1
+
+remoteuser1's home directory is materials.example.com:/rhome/remoteuser1
+
+The home directory of remoteuser1 should be automatically mounted to /rhome/remoteuser1 under the local /rhome
+
+The home directory must be writable by its user
+
+The password for remoteuser1 is password
+
+Answer:8 Configure autofs (service)
+1. Find the main configuration file
+[root@node1 ~]# rpm -qc autofs
+/etc/auto.master # absolute path configuration file
+/etc/auto.misc # relative path configuration file
+
+2. Configure the main configuration file
+[root@node1 ~]# vim /etc/auto.master
+/misc /etc/auto.misc
+/rhome /etc/auto.rhome #relative path configuration file
+
+3. Copy the relative path configuration file to the path written by the main configuration file
+[root@node1 ~]# cp /etc/auto.misc /etc/auto.rhome
+
+4. Edit the relative path configuration file
+[root@node1 ~]# vim /etc/auto.rhome
+remoteuser1 -rw materials.example.com:/rhome/remoteuser1
+
+5. restart service
+[root@node1 ~]# systemctl restart autofs.service
+
+check status
+[root@node1 ~]# systemctl status autofs.service
+Active: active (running)
+
+Set up autostart
+[root@node1 ~]# systemctl enable autofs.service
+Created symlink /etc/systemd/system/multi-user.target.wants/autofs.service → /usr/lib/systemd/system/autofs.service.
+
+6. Login test
+[root@node1 ~]# ssh remoteuser1@localhost
+[remoteuser1@clear ~]$ pwd
+/rhome/remoteuser1
+Check write permissions
+[remoteuser1@node1 ~]$ touch 1.txt
+[remoteuser1@node1 ~]$ ll
+total 0
+-rw-rw-r--. 1 devops devops 0 May 27 12:04 1.txt
