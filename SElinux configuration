@@ -1,0 +1,43 @@
+Question:3 Debug SELinux (service)
+A web server running on a non-standard port 82 is having trouble serving content. Debug and resolve the issue as necessary so that the following conditions are met:
+
+The web server on the system is able to serve all existing HTML files in /var/www/html (note: do not delete or otherwise alter the contents of existing files)
+
+The web server serves this content on port 82
+
+The web server starts automatically at system startup
+
+Answer:3 Debug SELinux (service)
+semanage command is used to query and modify the security context of the SELinux default directory
+
+apache belongs to httpd service
+
+View httpd service status
+[root@node1 ~]# systemctl status httpd
+Active: failed (Result: exit-code)
+View the security context of the HTML file
+ls -Z  #prints the security context of the file
+[root@node1 html]# ls -Z /var/www/html/*
+system_u:object_r:default_t:s0 /var/www/html/file1
+system_u:object_r:httpd_sys_content_t:s0 /var/www/html/file2
+system_u:object_r:httpd_sys_content_t:s0 /var/www/html/file3
+Modify the security context of the original /var/www/html/file1 file
+man semange fcontext
+# parameters to look for -a is replaced by -m (modify)
+[root@node1 html]# semanage fcontext -m -t httpd_sys_content_t "/var/www/html/file1"
+Refresh the security context
+[root@node1 html]# restorecon -R -v /var/www/html/file1
+Relabeled /var/www/html/file1 from system_u:object_r:default_t:s0 to system_u:object_r:httpd_sys_content_t:s0
+Use semanage to release port 82
+# man semanage port
+[root@node1 ~]# semanage port -a -t http_port_t -p tcp 82
+Check whether port 82 is allowed
+# man semanage port
+[root@node1 ~]# semanage port -l | grep http
+http_port_t tcp 82, 80, 81, 443, 488, 8008, 8009, 8443, 9000
+Restart the httpd service, set the boot to start automatically, and check whether the service is enabled
+[root@node1 ~]# systemctl restart httpd
+[root@node1 ~]# systemctl enable httpd
+[root@node1 ~]# systemctl status httpd
+Access verification
+[root@node1 html]# curl http://172.25.250.100:82/file{1..3}
