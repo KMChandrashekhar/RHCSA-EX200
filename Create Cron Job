@@ -1,0 +1,23 @@
+Question:5 Configure a cron job (service)
+Configure a cron job that runs every 2 minutes and executes the following command:
+
+logger "EX200 in progress", run as user natasha
+Answer:5 Configure a cron job (service)
+1.check if cron service is currently running
+[root@node1 ~]# systemctl status crond.service
+Active: active (running)
+
+2. Edit scheduled tasks
+[root@node1 ~]# crontab -u natasha -e
+[root@node1 ~]# crontab -u natasha -l
+*/2 * * * * logger "EX200 in progress"
+
+3. enable and restart service
+[root@node1 ~]# systemctl enable crond.service
+
+4.Check if log message are being loggged
+#verify
+[root@node1 ~]# grep EX200 /var/log/messages
+node1 natasha[28082]: EX200 in progress
+node1 natasha[28086]: EX200 in progress
+node1 natasha[28097]: EX200 in progress
