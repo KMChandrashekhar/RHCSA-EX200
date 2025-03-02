@@ -1,0 +1,19 @@
+Question:1 Configure your Host Name, IP Address, Gateway and DNS.
+Configure your Host Name, IP Address, Gateway and DNS.
+
+Host name: mars.domain250.example.com
+IP Address: 172.25.250.100/24
+Network Mask: 255.255.255.0
+Gateway: 172.25.250.254
+DNS: 172.25.250.254
+Answer:1 Configure your Host Name, IP Address, Gateway and DNS.
+setting up hostname
+
+[root@Server-A ~]# vim /etc/hostname
+or
+
+[root@Server-A ~]# hostnamectl set-hostname <hostname>
+
+setting ipv4/GW/DNS
+
+[root@Server-A ~]# nmcli connection modify enp0s3 autoconnect yes ipv4.method manual ipv4.addresses 172.25.250.100 ipv4.gateway 172.25.250.254 ipv4.dns 172.25.250.254
