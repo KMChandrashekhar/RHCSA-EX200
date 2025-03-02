@@ -1,0 +1,26 @@
+Question:4 create user account
+Create the following users, groups, and group memberships: A group named sysmgrs
+
+User natasha , who also belongs to sysmgrs as a secondary group
+User harry , who also belongs to sysmgrs as a secondary group
+User sarah , does not have access to an interactive shell on the system and is not a member of sysmgrs
+passwords for natasha , harry and sarah should all be password
+Answer:4 create user account
+[root@clear ~]# groupadd sysmgrs
+[root@clear ~]# useradd natasha -G sysmgrs
+[root@clear ~]# useradd harry  -G sysmgrs
+[root@clear ~]# useradd sarah --shell /sbin/nologin
+[root@clear ~]# echo "password" | passwd --stdin natasha
+Changing password for user natasha.
+passwd: all authentication tokens updated successfully.
+[root@clear ~]# echo "password" | passwd --stdin harry
+Changing password for user harry.
+passwd: all authentication tokens updated successfully.
+[root@clear ~]# echo "password" | passwd --stdin sarah
+Changing password for user sarah.
+passwd: all authentication tokens updated successfully.
+
+Check connectivity
+[root@node1 ~]# ssh natasha@localhost
+[harry@node1 ~]$ ssh sarah@localhost
+[harry@node1 ~]$ ssh sarah@localhost	#no interactive shell allocated for sarah /sbin/nologin
