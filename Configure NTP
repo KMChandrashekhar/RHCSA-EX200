@@ -1,0 +1,37 @@
+Question:7 Configure NTP (time synchronization service) (service)
+Configure your system to be an NTP client for materials.example.com.
+(Note: materials.example.com is a DNS alias for classroom.example.com)
+Answer:7 Configure NTP (time synchronization service) (service)
+# systemctl list-units lists all startup units
+# Unit is the basic unit for Systemd to manage system resources
+
+# The client side synchronizes with the server
+# nodel is the client materials.example.com's NTP is the server
+
+1.View the name of the main configuration file of the NTP service
+[root@node1 ~]# systemctl list-units | grep NTP
+chronyd.service
+
+2. Confirm whether the service is started
+[root@node1 ~]# systemctl status chronyd.service
+Active: active (running)
+
+3. Modify the service configuration file and specify the address of the upstream server to be added
+[root@node1 ~]# vim /etc/chrony.conf
+#server_gateway iburst
+server materials.example.com iburst
+
+4. Restart the service, let the modification of the configuration file take effect, and set the boot to start automatically
+[root@node1 ~]# systemctl restart chronyd.service
+[root@node1 ~]# systemctl enable chronyd.service
+
+5. Verify
+method one:
+[root@node1 ~]# chronyc sources -v #View synchronization time status
+^* classroom.example.com
+
+method two:
+[root@node1 ~]# timedatectl
+#Check whether NTP is active and whether the system clock is synchronized
+System clock synchronized: yes
+                NTP service: active
