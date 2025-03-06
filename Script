@@ -1,0 +1,17 @@
+Question:22 Creating scripts
+create script
+
+Create a myresearchscript called
+The script is placed /usr/binunder
+This script is used to find /usrall files that are smaller than 10m and have modification Group ID permissions s, and place these files /root/myfilesunder
+Answers:22 Creating scripts
+# vim /usr/bin/newsearch
+
+#!/bin/bash
+mkdir /root/newfiles
+find /usr -size -10M -perm /u=s cp -a {} /root/newfiles \;
+# chmod +x /usr/bin/newsearch
+
+# ./usr/bin/newsearch
+
+# cat /root/newfiles
