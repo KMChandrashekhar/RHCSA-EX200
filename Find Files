@@ -1,0 +1,12 @@
+Question:11 Find files
+Find all files owned by jacques and place a copy of them in the /root/findfiles directory.
+Answer:11 Find files
+1. Create a directory
+[root@clear ~]# mkdir /root/findfiles
+
+2. Find
+[root@clear ~]# find / -user jacques -exec cp -a {} /root/findfiles/ \;
+
+3. Verification
+[root@clear ~]# ls /root/findfiles/
+gamelan jacques libWedgeit.so.1.2.3
