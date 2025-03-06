@@ -1,0 +1,15 @@
+Question:21 Creating scripts
+Create a newsearchscript called
+The script is placed /usr/binunder
+This script is used to find /usrall files that are greater than 30k, but less than 50k and have SUIDpermissions, and place these file names in the /root/newfilesfile
+Answer:21 Creating scripts
+# vim /usr/bin/newsearch
+
+#!/bin/bash
+touch /root/newfiles
+find /usr -size +30k -size -50k -perm /u=s > /root/newfiles
+# chmod +x /usr/bin/newsearch
+
+# ./usr/bin/newsearch
+
+# cat /root/newfiles
