@@ -1,0 +1,36 @@
+Question:14 Add a swap partition
+Adding an extra 512M swap partition to your system, this swap partition should mount automatically when the system starts up. Don't remove and modify the existing swap partitions on your system.
+
+Answer:14 Add a swap partition
+1. List all block devices
+[root@node2~]# lsblk
+NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINT
+vda 252:0 0 10G 0 disk
+├─vda1 252:1 0 1M 0 part
+├─vda2 252:2 0 100M 0 part /boot/efi
+└─vda3 252:3 0 9.9G 0 part /
+vdb 252:16 0 4G 0 disk
+├─vdb1 252:17 0 510M 0 part
+│ └─myvol-vo 253:1 0 232M 0 lvm /reports
+└─vdb2 252:18 0 512M 0 part
+   └─vgroup-swap 253:0 0 256M 0 lvm [SWAP]
+vdc 252:32 0 10G 0 disk
+
+2. Create disk partitions
+[root@node2 ~]# fdisk /dev/vdb
+
+3. Formatting
+[root@node2 ~]# mkswap /dev/vdb3
+Setting up swapspace version 1, size = 512 MiB (792719360 bytes)
+no label, UUID=ba522efa-8aa3-4e96-b8e2-39aafa20f3cb
+
+4. Permanent mount
+[root@node2 ~]# vim /etc/fstab
+UUID=ba522efa-8aa3-4e96-b8e2-39aafa20f3cb none swap defaults 0 0
+
+5. Verify
+[root@node2 ~]# swapon -a #refresh
+[root@node2 ~]# swapon
+NAME TYPE SIZE USED PRIO
+/dev/dm-0 partition 256M 0B -2
+/dev/vdb3 partition 512M 0B -3
