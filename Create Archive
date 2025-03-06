@@ -1,0 +1,15 @@
+Question:13 Create archive
+Create a tar archive named /root/backup.tar.gz, which should contain the tar archive of /usr/local
+Which should contain the contents of /usr/local. The tar archive must be compressed with gzip format.
+Answer:13 Create archive
+1. pack
+[root@clear ~]# tar -czvf /root/backup.tar.gz /usr/local
+
+2. Verification
+[root@clear ~]# ls
+anaconda-ks.cfg findfiles
+backup.tar.gz original-ks.cfg
+
+3. Verify whether it is gzip
+[root@clear ~]# file backup.tar.gz
+backup.tar.gz: gzip compressed data, last modified: Sun May 22 17:10:03 , from Unix, original size 51200
