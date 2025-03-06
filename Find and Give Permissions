@@ -1,0 +1,19 @@
+Question:17 Permissions
+Find all sizes of 10k file or directory under the /etc directory, and copy to /tmp/findfiles directory.
+Find all the files or directories with Lucy as the owner, and copy to /tmp/findfiles directory.
+Answer:17 Permissions
+1. File copy
+[root@node1 ~]# cp /etc/fstab /var/tmp/fstab
+
+2. Check whether the owner and the owner group meet the meaning of the question, and there is no execution permission
+[root@node1 ~]# ll -d /var/tmp/fstab
+-rw-r--r--. 1 root root 534 May 23 12:27 /var/tmp/fstab
+
+3. Set setfacl permission
+man setfacl
+[root@node1 ~]# setfacl -m u:natasha:rw-,u:harry:- /var/tmp/fstab
+
+4. Verify
+[root@node1 ~]# getfacl /var/tmp/fstab
+user:natasha:rw-
+user:harry:---
