@@ -1,0 +1,7 @@
+Question:10 Configure user accounts
+Configure user manalo with user ID 3533.
+Answer:10 Configure user accounts
+[root@clear ~]# useradd -u 3533 manalo
+[root@clear ~]# echo "password" | passwd --stdin manalo
+Changing password for user manalo.
+passwd: all authentication tokens updated successfully.
