@@ -1,0 +1,25 @@
+Question:16 Create a logical volume
+Set logical volume size
+
+Resize the logical volume vo and its file system to 230 MiB. Make sure the filesystem contents remain unchanged. Note: The partition size is rarely exactly the requested size, so a range of 230 MiB to 270 MiB is acceptable.
+
+Answer:16 Create a logical volume
+1. Query logical volume vo
+[root@node2 ~]# df -h
+/dev/mapper/myvol-vo 175M 1.6M 160M 1% /reports
+
+2. Expansion
+[root@node2 ~]# lvextend -L 250M /dev/mapper/myvol-vo #Expand logical volume space
+   Logical volume myvol/vo successfully resized.
+
+3. Query formatting type (ext4)
+[root@node2 ~]# blkid | grep vo
+/dev/mapper/myvol-vo: UUID="67994f68-d3e1-4686-8393-8df05149883f" TYPE="ext4"
+
+
+5. Refresh according to type
+[root@node2 ~]# resize2fs /dev/mapper/myvol-vo
+
+6. Verify
+[root@node2 ~]# df -h
+/dev/mapper/myvol-vo 240M 2.1M 204M 1% /reports
