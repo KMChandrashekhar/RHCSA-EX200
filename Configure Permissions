@@ -22,3 +22,5 @@ man setfacl
 [root@node1 ~]# getfacl /var/tmp/fstab
 user:natasha:rw-
 user:harry:---
+
+#USER PERMISSIONS
