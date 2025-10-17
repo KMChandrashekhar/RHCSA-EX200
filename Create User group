@@ -24,3 +24,5 @@ Check connectivity
 [root@node1 ~]# ssh natasha@localhost
 [harry@node1 ~]$ ssh sarah@localhost
 [harry@node1 ~]$ ssh sarah@localhost	#no interactive shell allocated for sarah /sbin/nologin
+
+#USER GROUP & ADDING MEMBERS TO GROUP 
