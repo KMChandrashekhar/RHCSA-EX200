@@ -23,3 +23,5 @@ Answer:16 Create a logical volume
 6. Verify
 [root@node2 ~]# df -h
 /dev/mapper/myvol-vo 240M 2.1M 204M 1% /reports
+
+#RHCSA EXAMINATION
