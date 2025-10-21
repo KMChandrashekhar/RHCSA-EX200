@@ -23,4 +23,4 @@ man setfacl
 user:natasha:rw-
 user:harry:---
 
-#USER PERMISSIONS
+#USER PERMISSIONS RWX 421
