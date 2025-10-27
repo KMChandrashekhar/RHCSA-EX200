@@ -1,1 +1,1 @@
-# RHCSA-EX200 Real time Exam Questions with Answers
+# RHCSA-EX200 Real time Exam Questions 
